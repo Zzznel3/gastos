@@ -13,6 +13,9 @@ create table if not exists public.gastos (
 
 create index if not exists gastos_user_fecha_idx on public.gastos (user_id, fecha desc);
 
+-- Acceso solo para usuarios con sesión iniciada (el proyecto no expone tablas automáticamente).
+grant select, insert, update, delete on public.gastos to authenticated;
+
 -- Seguridad por filas: cada usuario solo ve y modifica sus propios gastos.
 alter table public.gastos enable row level security;
 
