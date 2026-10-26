@@ -345,6 +345,15 @@
   const formLogin = $('#form-login');
   const loginMsg = $('#login-msg');
 
+  const ERRORES_LOGIN = [
+    [/invalid login credentials/i, 'Correo o contraseña incorrectos. Si aún no tienes cuenta, toca "Crear cuenta".'],
+    [/email not confirmed/i, 'Falta confirmar el correo. Revisa tu bandeja de entrada (y spam).'],
+    [/already registered/i, 'Ese correo ya tiene cuenta. Usa "Entrar".'],
+    [/rate limit/i, 'Se enviaron demasiados correos. Espera un rato y vuelve a intentar.'],
+    [/at least 6 characters/i, 'La contraseña debe tener al menos 6 caracteres.'],
+  ];
+  const traducirError = (msg) => (ERRORES_LOGIN.find(([re]) => re.test(msg)) || [null, msg])[1];
+
   async function entrar(registro) {
     if (!formLogin.reportValidity()) return;
     const email = formLogin.email.value.trim();
@@ -357,7 +366,7 @@
       : await sb.auth.signInWithPassword({ email, password });
     botones.forEach((b) => (b.disabled = false));
     if (error) {
-      loginMsg.textContent = error.message === 'Invalid login credentials' ? 'Correo o contraseña incorrectos.' : error.message;
+      loginMsg.textContent = traducirError(error.message);
     } else if (registro && !data.session) {
       loginMsg.textContent = 'Cuenta creada. Revisa tu correo para confirmarla y luego entra.';
     } else {
