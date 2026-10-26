@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mis Gastos</title>
+  <meta name="description" content="Registro personal de gastos">
+  <meta name="theme-color" content="#0f766e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Gastos">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div id="red" class="red" hidden></div>
+
+  <section id="pantalla-config" class="pantalla centro" hidden>
+    <div class="tarjeta">
+      <h1>Falta configurar</h1>
+      <p id="config-msg">Completa <code>config.js</code> con la URL y la anon key de tu proyecto Supabase.</p>
+    </div>
+  </section>
+
+  <section id="pantalla-login" class="pantalla centro" hidden>
+    <form id="form-login" class="tarjeta login">
+      <img src="/icons/icon-192.png" alt="" width="64" height="64" class="logo">
+      <h1>Mis Gastos</h1>
+      <label>Correo
+        <input name="email" type="email" autocomplete="email" required>
+      </label>
+      <label>Contraseña
+        <input name="password" type="password" autocomplete="current-password" minlength="6" required>
+      </label>
+      <button type="submit" class="btn primario">Entrar</button>
+      <button type="button" id="btn-registro" class="btn secundario">Crear cuenta</button>
+      <p id="login-msg" class="msg" role="status"></p>
+    </form>
+  </section>
+
+  <section id="pantalla-app" class="pantalla" hidden>
+    <header class="barra">
+      <button id="mes-ant" class="icono" aria-label="Mes anterior">‹</button>
+      <h1 id="mes-titulo"></h1>
+      <button id="mes-sig" class="icono" aria-label="Mes siguiente">›</button>
+      <button id="btn-salir" class="salir">Salir</button>
+    </header>
+
+    <main>
+      <section class="tarjeta resumen">
+        <p class="etiqueta">Total del mes</p>
+        <p id="total" class="total"></p>
+        <p id="conteo" class="sub"></p>
+        <ul id="por-categoria" class="barras"></ul>
+      </section>
+      <section id="lista" class="lista"></section>
+    </main>
+
+    <button id="btn-nuevo" class="fab" aria-label="Agregar gasto">+</button>
+  </section>
+
+  <dialog id="dlg-gasto">
+    <form id="form-gasto">
+      <header class="dlg-cab">
+        <h2 id="dlg-titulo">Nuevo gasto</h2>
+        <button type="button" id="dlg-cerrar" class="icono" aria-label="Cerrar">✕</button>
+      </header>
+
+      <label class="campo-monto">Monto
+        <input name="monto" type="number" inputmode="decimal" min="0" step="any" placeholder="0" required>
+      </label>
+
+      <fieldset class="chips">
+        <legend>Categoría</legend>
+        <div id="chips-categoria"></div>
+      </fieldset>
+
+      <div class="fila2">
+        <label>Fecha
+          <input name="fecha" type="date" required>
+        </label>
+        <label>Pago
+          <select name="metodo" id="sel-metodo"></select>
+        </label>
+      </div>
+
+      <label>Nota
+        <input name="nota" type="text" maxlength="120" placeholder="Opcional">
+      </label>
+
+      <div class="acciones">
+        <button type="button" id="btn-borrar" class="btn peligro" hidden>Borrar</button>
+        <button type="submit" class="btn primario">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
